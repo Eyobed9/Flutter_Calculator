@@ -126,9 +126,10 @@ class _CalculatorState extends State<Calculator> {
       return;
     }
 
-    // If equal to is pressed 
+    // If equal to is pressed
     if (value == CalcButtons.equals) {
-      
+      calculate();
+      return;
     }
 
     appendValue(value);
@@ -140,11 +141,13 @@ class _CalculatorState extends State<Calculator> {
     // If it is an operand
     if (value != CalcButtons.dot && int.tryParse(value) == null) {
       // Calculate the result
-      if (num2.isNotEmpty && operand.isNotEmpty) {}
+      if (num2.isNotEmpty && operand.isNotEmpty) {
+        calculate();
+      }
 
       // Append the operand
       if (num1.isNotEmpty && operand.isEmpty) {
-        if (num1.substring(num1.length - 1) == CalcButtons.dot) {
+        if (num1.endsWith(CalcButtons.dot)) {
           num1 = num1.substring(0, num1.length - 1);
         }
         operand = value;
@@ -160,6 +163,10 @@ class _CalculatorState extends State<Calculator> {
           num1 += value;
         }
       } else if (value != CalcButtons.dot) {
+        if (num1 == "${double.infinity}") {
+          num1 = value;
+          return;
+        }
         num1 += value;
       }
     }
@@ -187,32 +194,82 @@ class _CalculatorState extends State<Calculator> {
     } else if (num1.isNotEmpty) {
       num1 = num1.substring(0, num1.length - 1);
     }
+
+    setState(() {});
   }
 
   // Clear the display
   void clear() {
-    num1 = "";
-    operand = "";
-    num2 = "";
+    setState(() {
+      num1 = "";
+      operand = "";
+      num2 = "";
+    });
   }
 
-  // Calculate the percentage 
+  // Calculate the percentage
   void calculatePercentage() {
     // For full expression
     if (num1.isNotEmpty && num2.isNotEmpty && operand.isNotEmpty) {
-      // Calculate the result 
+      // Calculate the result
+      calculate();
     }
 
     if (operand.isNotEmpty) {
       return;
     }
 
-    final num = double.parse(num1);
+    double num = 0.0;
+    if (num1 != "") {
+      num = double.parse(num1);
+    }
+
     setState(() {
-       num1 = "${(num / 100)}";
-       operand = "";
-       num2 = "";
+      num1 = "${(num / 100)}";
+      operand = "";
+      num2 = "";
     });
-  
+  }
+
+  // Calculate the value
+  void calculate() {
+    if (num1.isEmpty || num2.isEmpty || operand.isEmpty) {
+      return;
+    }
+
+    final double n1 = double.parse(num1);
+    final double n2 = double.parse(num2);
+
+    var result = 0.0;
+
+    switch (operand) {
+      case CalcButtons.add:
+        result = n1 + n2;
+        break;
+      case CalcButtons.subtract:
+        result = n1 - n2;
+        break;
+      case CalcButtons.multiply:
+        result = n1 * n2;
+        break;
+      case CalcButtons.divide:
+        if (n2 == 0.0) {
+          result = double.infinity;
+          break;
+        }
+        result = n1 / n2;
+      default:
+    }
+
+    setState(() {
+      num1 = "$result";
+
+      if (num1.endsWith(".0")) {
+        num1 = num1.substring(0, num1.length - 2);
+      }
+
+      num2 = "";
+      operand = "";
+    });
   }
 }
