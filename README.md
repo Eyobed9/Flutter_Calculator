@@ -13,9 +13,7 @@ This repository contains a small demonstration calculator with a clean UI and ba
 
 ## Screenshot
 
-
-
-![Calculator screenshot](doc/calculator.bmp)
+![Calculator screenshot](doc/calculator.jpg)
 
 ## Getting started
 
@@ -111,18 +109,17 @@ This project includes a basic widget test in `test/widget_test.dart`.
 
 ## Contributing
 
-Contributions are welcome. Open an issue to discuss planned work and submit pull requests for fixes or new features.
+Contributions are welcome! Please fork the repo and open a pull request.
 
-When contributing, please:
+```bash
+git clone https://github.com/Eyobed9/Flutter_Calculator.git
+git checkout -b feature/feature-name
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new behavior
-4. Submit a pull request with a clear description
+---
 
 ## License
-
-This project is provided under the MIT License. See `LICENSE` for details (or add a license file if none exists).
+This project is licensed under the [MIT License](./LICENSE).
 
 ## Contact
 
